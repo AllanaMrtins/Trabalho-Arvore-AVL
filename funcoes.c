@@ -1,5 +1,46 @@
 #include"estrutura_AVL.h"
 
+NoAVL *buscarProduto(NoAVL *raiz, int codigoProduto){
+    NoAVL *resultado;
+
+    if (raiz == NULL)
+        resultado = NULL;
+ 
+    else if (codigoProduto == raiz->produto.codigo)
+        resultado = raiz;
+ 
+    else if (codigoProduto < raiz->produto.codigo)
+        resultado = buscarProduto(raiz->esq, codigoProduto);
+ 
+    else
+        resultado = buscarProduto(raiz->dir, codigoProduto);
+ 
+    return resultado;
+}
+
+int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos){
+    int encontrado = 0;
+    *passos = 0;
+
+    while (raiz != NULL && encontrado == 0)
+    {
+        (*passos)++;
+
+        if (codigoProduto ==  raiz->produto.codigo)
+            encontrado = 1;
+    
+        else if(codigoProduto < raiz->produto.codigo)
+            raiz = raiz->esq;
+        else
+            raiz = raiz->dir;
+    }
+    return encontrado;
+}
+
+int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade);{
+    //ainda a ser feito
+}
+
 void mostrarProduto(NoAVL *raiz, int codigoProduto){
     NoAVL *noProduto;
     noProduto = buscarProduto(raiz, codigoProduto);
@@ -124,14 +165,256 @@ void balancear(NoAVL **raiz){
         }
     }else if (fator == -2 && fatorBalanceamento((*raiz)->dir) <= 0)
     {
-        *raiz = rotacaoesquerda(*raiz);
+        *raiz = rotacaoEsquerda(*raiz);
     }else if (fator == 2 && fatorBalanceamento((*raiz)->esq) < 0)
     {
-        (*raiz)->esq = rotacaoesquerda((*raiz)->esq);
+        (*raiz)->esq = rotacaoEsquerda((*raiz)->esq);
         *raiz = rotacaoDireita(*raiz);
     }else if (fator == -2 && fatorBalanceamento((*raiz)->dir) > 0)
     {
         (*raiz)->dir = rotacaoDireita((*raiz)->dir);
-        *raiz = rotacaoesquerda(*raiz);
+        *raiz = rotacaoEsquerda(*raiz);
     } 
+}
+
+NoAVL *rotacaoDireita(NoAVL *raiz){
+    NoAVL *novaRaiz;
+    NoAVL *subarvore;
+
+    novaRaiz = NULL;
+    subarvore = NULL;
+
+    if (raiz != NULL && raiz->esq != NULL)
+    {
+        novaRaiz = raiz->esq;
+        subarvore = novaRaiz->dir;
+
+        novaRaiz->dir = raiz;
+        raiz->esq = subarvore;
+
+        atualizarAltura(raiz);
+        atualizarAltura(novaRaiz);
+    }else{
+        novaRaiz = raiz;
+    }
+    return novaRaiz;
+}
+
+NoAVL *rotacaoEsquerda(NoAVL *raiz){
+    NoAVL *novaRaiz;
+    NoAVL *subarvore;
+
+    novaRaiz = NULL;
+    subarvore = NULL;
+
+    if(raiz != NULL && raiz->dir != NULL){
+        novaRaiz = raiz->dir;
+        subarvore = novaRaiz->esq;
+
+        novaRaiz->esq = raiz;
+        raiz->dir = subarvore;
+
+        atualizarAltura(raiz);
+        atualizarAltura(novaRaiz);
+    }else{
+        novaRaiz = raiz;
+    }
+    return novaRaiz;
+}
+
+void liberarAVL(NoAVL **raiz){
+    if (*raiz != NULL)
+    {
+        liberarAVL(&(*raiz)->esq);
+        liberarAVL(&(*raiz)->dir);
+
+        if((*raiz)->produto.fornecedor != NULL)
+            free((*raiz)->produto.fornecedor);
+        
+        if((*raiz)->produto.estoque != NULL)
+            free((*raiz)->produto.estoque);
+        
+        free(*raiz);
+        *raiz = NULL;
+    } 
+}
+
+//funcoes experimento
+void gerarCodigos(int codigos[]){
+    for (int i = 0; i < 100; i++)
+    {
+        codigos[i] = 100 + i;
+    }
+    
+}
+
+void inserirCodigos(NoAVL **raiz, int codigos[]){
+    Produto produto;
+    NoAVL *novo;
+
+    for (int i = 0; i < 100; i++)
+    {
+        produto.codigo = codigos[i];
+        printf(produto.nome, "Produto %04d", codigos[i]);
+        produto.fornecedor = NULL;
+        produto.estoque = NULL;
+
+        novo = criarNoAVL(produto);
+        inserirAVL(raiz, novo);
+    }
+}
+
+void realizarBuscas(NoAVL *raiz, int codigosBusca[]){
+    int passos;
+    for (int i = 0; i < 10; i++)
+    {
+        buscarComPassos(raiz, codigosBusca[i], &passos);
+        printf("Codigo %04d -> %d passos\n", codigosBusca[i], passos);
+    }
+}
+
+void gerarOrdemMeioAleatoria(int origem[], int destino[]){
+    int usados[100];
+    int pos, aux;
+
+    for (int i = 0; i < 100; i++)
+    {
+        usados[i] = 0;
+    }
+    destino[0] = origem[50];
+    usados[50] = 1;
+
+    for (int i = 0; i < 100; i++)
+    {
+        do
+        {
+            pos = rand() % 100;
+        } while (usados[pos] == 1);
+
+        destino[i] = origem[pos];
+        usados[pos] = 1;
+    }
+
+    for (int i = 99; i > 1; i--)
+    {
+        int j;
+        aux = destino[i];
+        destino[i] = destino[j];
+        destino[j] = aux;
+    }
+}
+
+void inverterCodigos(int codigos[]){
+    int aux;
+    for (int i = 0; i < 50; i++)
+    {
+        aux = codigos[i];
+        codigos[i] = codigos[99 - i];
+        codigos[99 - i] = aux;
+    }
+}
+
+void embaralharCodigos(int codigos[]){
+    int i, j, aux;
+ 
+    for (i = 99; i > 0; i--){
+        j = rand() % (i + 1);
+ 
+        aux = codigos[i];
+        codigos[i] = codigos[j];
+        codigos[j] = aux;
+    }
+}
+
+void buscarCodigoNaoCadastrado(NoAVL *raiz, int codigo){
+    int passos, encontrado;
+ 
+    encontrado = buscarComPassos(raiz, codigo, &passos);
+ 
+    if (encontrado == 0)
+        printf("Codigo nao cadastrado: %04d -> %d passos\n", codigo, passos);
+    else
+        printf("Codigo encontrado: %04d -> %d passos\n", codigo, passos);
+}
+
+void rodarExperimentoProdutos(void){
+ 
+    int codigos[100];
+    int codigosCrescente[100];
+    int codigosDecrescente[100];
+    int codigosMeioAleatorio[100];
+    int codigosAleatorio[100];
+    int codigosBusca[10];
+ 
+    int i;
+    int codigoNaoCadastrado = 9999;
+    NoAVL *raiz = NULL;
+ 
+    gerarCodigos(codigos);
+ 
+    for (i = 0; i < 10; i++)
+        codigosBusca[i] = codigos[i];
+ 
+    
+    for (i = 0; i < 100; i++)
+        codigosCrescente[i] = codigos[i];
+ 
+    printf("\n    Experimento 1 - Ordem crescente    \n");
+    inserirCodigos(&raiz, codigosCrescente);
+    realizarBuscas(raiz, codigosBusca);
+ 
+    printf("\nBusca por codigo nao cadastrado:\n");
+    buscarCodigoNaoCadastrado(raiz, codigoNaoCadastrado);
+ 
+    printf("Altura final da AVL: %d\n", altura(raiz));
+ 
+    liberarAVL(&raiz);
+ 
+    
+    for (i = 0; i < 100; i++)
+        codigosDecrescente[i] = codigos[i];
+    inverterCodigos(codigosDecrescente);
+ 
+    printf("\n    Experimento 2 - Ordem decrescente    \n");
+    inserirCodigos(&raiz, codigosDecrescente);
+    realizarBuscas(raiz, codigosBusca);
+ 
+    printf("\nBusca por codigo nao cadastrado:\n");
+    buscarCodigoNaoCadastrado(raiz, codigoNaoCadastrado);
+ 
+    printf("Altura final da AVL: %d\n", altura(raiz));
+ 
+    liberarAVL(&raiz);
+ 
+   
+    gerarOrdemMeioAleatoria(codigos, codigosMeioAleatorio);
+ 
+    printf("\n   Experimento 3 - Codigo do meio primeiro + aleatorio    \n");
+    inserirCodigos(&raiz, codigosMeioAleatorio);
+    realizarBuscas(raiz, codigosBusca);
+ 
+    printf("\nBusca por codigo nao cadastrado:\n");
+    buscarCodigoNaoCadastrado(raiz, codigoNaoCadastrado);
+ 
+    printf("Altura final da AVL: %d\n", altura(raiz));
+ 
+    liberarAVL(&raiz);
+ 
+    
+    for (i = 0; i < 100; i++)
+        codigosAleatorio[i] = codigos[i];
+    embaralharCodigos(codigosAleatorio);
+ 
+    printf("\n    Experimento 4 - Totalmente aleatorio    \n");
+    inserirCodigos(&raiz, codigosAleatorio);
+    realizarBuscas(raiz, codigosBusca);
+ 
+    printf("\nBusca por codigo nao cadastrado:\n");
+    buscarCodigoNaoCadastrado(raiz, codigoNaoCadastrado);
+ 
+    printf("Altura final da AVL: %d\n", altura(raiz));
+ 
+    liberarAVL(&raiz);
+ 
+    printf("\n--- FIM DO EXPERIMENTO ) ---\n");
 }

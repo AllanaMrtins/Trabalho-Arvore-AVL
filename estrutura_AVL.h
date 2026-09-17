@@ -1,7 +1,11 @@
-#ifndef ARVORE_BINARIA_BUSCA
-#define ARVORE_BINARIA_BUSCA
+#ifndef ARVORE_AVL
+#define ARVORE_AVL
+
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#include<time.h>
 
 typedef struct Fornecedor
 {
@@ -32,6 +36,10 @@ typedef struct NoAVL
     struct NoAVL *dir;
 }NoAVL;
 
+NoAVL *buscarProduto(NoAVL *raiz, int codigoProduto);
+
+int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos);
+
 int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade);
 
 void mostarProduto(NoAVL *raiz, int codigoProduto);
@@ -50,6 +58,28 @@ int fatorBalanceamento(NoAVL *raiz);
 
 void balancear(NoAVL **raiz);
 
+NoAVL *rotacaoEsquerda(NoAVL *raiz);
 
+NoAVL *rotacaoEsquerda(NoAVL *raiz);
+
+void liberarAVL(NoAVL **raiz);
+
+//funções do experimento
+
+void gerarCodigos(int codigos[]);
+
+void inserirCodigos(NoAVL **raiz, int codigos[]);
+
+void realizarBuscas(NoAVL *raiz, int codigosBusca[]);
+
+void gerarOrdemMeioAleatoria(int origem[], int destino[]);
+
+void inverterCodigos(int codigos[]);
+
+void embaralharCodigos(int codigos[]);
+
+void buscarCodigoNaoCadastrado(NoAVL *raiz, int codigo);
+
+void rodarExperimentoProdutos(void);
 
 #endif
