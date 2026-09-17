@@ -48,7 +48,7 @@ void atualizarAltura(NoAVL *raiz);
 
 int fatorBalanceamento(NoAVL *raiz);
 
-void balancear(NoAVL **raiz)
+void balancear(NoAVL **raiz);
 
 
 
