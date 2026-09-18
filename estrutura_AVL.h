@@ -42,7 +42,7 @@ int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos);
 
 int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade);
 
-void mostarProduto(NoAVL *raiz, int codigoProduto);
+void mostrarProduto(NoAVL *raiz, int codigoProduto);
 
 NoAVL *criarNoAVL(Produto produto);
 
@@ -58,7 +58,7 @@ int fatorBalanceamento(NoAVL *raiz);
 
 void balancear(NoAVL **raiz);
 
-NoAVL *rotacaoEsquerda(NoAVL *raiz);
+NoAVL *rotacaoDireita(NoAVL *raiz);
 
 NoAVL *rotacaoEsquerda(NoAVL *raiz);
 
