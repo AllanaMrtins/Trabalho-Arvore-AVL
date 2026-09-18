@@ -7,16 +7,16 @@ orientação a objetos).
 ## Descrição do Projeto
 
 O sistema permite cadastrar produtos, consultar informações (nome, fornecedor e estoque) por
-código, cadastrar a quantidade em estoque de um produto já existente, e executar um experimento
-com 100 códigos de produto para analisar o desempenho da árvore sob diferentes ordens de
-inserção.
+código, cadastrar a quantidade em estoque e o fornecedor de um produto já existente, e
+executar um experimento com 100 códigos de produto para analisar o desempenho da árvore sob
+diferentes ordens de inserção.
 
 ## Estrutura de Arquivos
 
 ```
 .
 ├── estrutura_AVL.h   # Definições de structs e protótipos de funções
-├── estrutura_AVL.c   # Implementação das funções da árvore AVL
+├── funcoes.c         # Implementação das funções da árvore AVL
 └── main.c            # Menu interativo do programa
 ```
 
@@ -74,12 +74,13 @@ gcc main.c funcoes.c -o programa
 |   2  - Buscar produto (codigo)                   |
 ---------------------------------------------------
 |   3  - Cadastrar estoque de um produto           |
+|   4  - Cadastrar fornecedor de um produto        |
 ---------------------------------------------------
 | (e) Experimento com 100 codigos de produto       |
-|   4  - Rodar experimento (4 ordens x busca)      |
+|   5  - Rodar experimento (4 ordens x busca)      |
 ---------------------------------------------------
 | Utilitario                                       |
-|   5  - Liberar a arvore (memoria)                |
+|   6  - Liberar a arvore (memoria)                |
 |   0  - Sair                                      |
 ---------------------------------------------------
 ```
@@ -101,6 +102,11 @@ e cria ou atualiza o registro de estoque associado a ele.
 int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade);
 ```
 
+### Cadastro de fornecedor de um produto
+Acessível pela opção **4** do menu. Localiza o produto pelo código e cria ou atualiza o
+registro de fornecedor associado a ele, permitindo que a função do item (d) exiba essa
+informação junto com os demais dados do produto.
+
 ### (d) Exibição de dados de um produto
 Função `mostrarProduto`, acessível pela opção **2** do menu. Recebe o código do produto e
 exibe nome, fornecedor (se cadastrado) e quantidade em estoque (se cadastrada).
@@ -110,7 +116,7 @@ void mostrarProduto(NoAVL *raiz, int codigoProduto);
 ```
 
 ### (e) Experimento com 100 códigos de produto
-Função `rodarExperimentoProdutos`, acessível pela opção **4** do menu. Gera 100 códigos e os
+Função `rodarExperimentoProdutos`, acessível pela opção **5** do menu. Gera 100 códigos e os
 insere na árvore AVL em quatro ordens distintas, medindo a quantidade de passos (nós
 percorridos) necessária para localizar 10 códigos fixos e um código não cadastrado em cada
 cenário:
