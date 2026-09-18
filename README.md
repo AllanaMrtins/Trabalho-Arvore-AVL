@@ -56,7 +56,7 @@ de forma independente, sem duplicar dados dentro da estrutura do produto.
 ## Compilação
 
 ```bash
-gcc main.c estrutura_AVL.c -o programa
+gcc main.c funcoes.c -o programa
 ```
 
 ## Execução
