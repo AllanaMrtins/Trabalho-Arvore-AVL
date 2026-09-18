@@ -4,7 +4,6 @@ void exibirMenu(void);
 void limparBuffer(void);
 void cadastrarProdutoManual(NoAVL **raizProdutos);
 void buscarProdutoMenu(NoAVL *raizProdutos);
-void removerProdutoMenu(NoAVL **raizProdutos);
 void cadastrarEstoqueMenu(NoAVL *raizProdutos);
 
 int main(void){
@@ -33,23 +32,14 @@ int main(void){
             break;
 
         case 3:
-            removerProdutoMenu(&raizProdutos);
-            break;
-
-        case 4:
-            printf("\n    Lista de produtos (em ordem de codigo)    \n");
-            exibirProdutos(raizProdutos);
-            break;
-
-        case 5:
             cadastrarEstoqueMenu(raizProdutos);
             break;
 
-        case 6:
+        case 4:
             rodarExperimentoProdutos();
             break;
 
-        case 7:
+        case 5:
             liberarAVL(&raizProdutos);
             printf("\nA arvore de produtos foi liberada da memoria.\n");
             break;
@@ -79,16 +69,14 @@ void exibirMenu(void){
         "---------------------------------------------------  \n"
         "|   1  - Cadastrar produto                           |\n"
         "|   2  - Buscar produto (codigo)                     |\n"
-        "|   3  - Remover produto (codigo)                    |\n"
-        "|   4  - Exibir produtos                              |\n"
         " ---------------------------------------------------  \n"
-        "|   5  - Cadastrar estoque de um produto             |\n"
+        "|   3  - Cadastrar estoque de um produto             |\n"
         " ---------------------------------------------------  \n"
         "| (e) Experimento com 100 codigos de produto         |\n"
-        "|   6  - Rodar experimento (4 ordens x busca)        |\n"
+        "|   4  - Rodar experimento (4 ordens x busca)        |\n"
         " ---------------------------------------------------  \n"
         "| Utilitario                                         |\n"
-        "|   7  - Liberar a arvore (memoria)                  |\n"
+        "|   5  - Liberar a arvore (memoria)                  |\n"
         "|   0  - Sair                                        |\n"
         " ---------------------------------------------------  \n"
         "Escolha uma opcao: "
@@ -105,7 +93,6 @@ void limparBuffer(void){
 
 
 void cadastrarProdutoManual(NoAVL **raizProdutos){
-
     Produto produto;
     NoAVL *novo;
     int totalAntes;
@@ -139,7 +126,6 @@ void cadastrarProdutoManual(NoAVL **raizProdutos){
 
 
 void buscarProdutoMenu(NoAVL *raizProdutos){
-
     int codigo;
     int passos;
     NoAVL *resultado;
@@ -164,23 +150,7 @@ void buscarProdutoMenu(NoAVL *raizProdutos){
 }
 
 
-void removerProdutoMenu(NoAVL **raizProdutos){
-
-    int codigo;
-
-    printf("\nDigite o codigo do produto que deseja remover: ");
-    scanf("%d", &codigo);
-    limparBuffer();
-
-    if (removerAVL(raizProdutos, codigo))
-        printf("\nProduto removido com sucesso!\n");
-    else
-        printf("\nCodigo nao encontrado.\n");
-}
-
-
 void cadastrarEstoqueMenu(NoAVL *raizProdutos){
-
     int codigo;
     int quantidade;
 
