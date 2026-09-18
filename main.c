@@ -5,6 +5,7 @@ void limparBuffer(void);
 void cadastrarProdutoManual(NoAVL **raizProdutos);
 void buscarProdutoMenu(NoAVL *raizProdutos);
 void cadastrarEstoqueMenu(NoAVL *raizProdutos);
+void cadastrarFornecedorMenu(NoAVL *raizProdutos);
 
 int main(void){
 
@@ -36,10 +37,14 @@ int main(void){
             break;
 
         case 4:
-            rodarExperimentoProdutos();
+            cadastrarFornecedorMenu(raizProdutos);
             break;
 
         case 5:
+            rodarExperimentoProdutos();
+            break;
+
+        case 6:
             liberarAVL(&raizProdutos);
             printf("\nA arvore de produtos foi liberada da memoria.\n");
             break;
@@ -71,12 +76,13 @@ void exibirMenu(void){
         "|   2  - Buscar produto (codigo)                     |\n"
         " ---------------------------------------------------  \n"
         "|   3  - Cadastrar estoque de um produto             |\n"
+        "|   4  - Cadastrar fornecedor de um produto          |\n"
         " ---------------------------------------------------  \n"
         "| (e) Experimento com 100 codigos de produto         |\n"
-        "|   4  - Rodar experimento (4 ordens x busca)        |\n"
+        "|   5  - Rodar experimento (4 ordens x busca)        |\n"
         " ---------------------------------------------------  \n"
         "| Utilitario                                         |\n"
-        "|   5  - Liberar a arvore (memoria)                  |\n"
+        "|   6  - Liberar a arvore (memoria)                  |\n"
         "|   0  - Sair                                        |\n"
         " ---------------------------------------------------  \n"
         "Escolha uma opcao: "
@@ -165,4 +171,44 @@ void cadastrarEstoqueMenu(NoAVL *raizProdutos){
         printf("\nEstoque cadastrado com sucesso!\n");
     else
         printf("\nProduto nao encontrado.\n");
+}
+
+void cadastrarFornecedorMenu(NoAVL *raizProdutos)
+{
+    int codigoProduto;
+    int codigoFornecedor;
+    char nome[100];
+    char telefone[30];
+
+    printf("\n========== Cadastro de Fornecedor ==========\n");
+
+    printf("Digite o codigo do produto: ");
+    scanf("%d", &codigoProduto);
+    limparBuffer();
+
+    
+    if (buscarProduto(raizProdutos, codigoProduto) == NULL)
+    {
+        printf("\nProduto nao encontrado.\n");
+        return;
+    }
+
+    printf("Codigo do fornecedor: ");
+    scanf("%d", &codigoFornecedor);
+    limparBuffer();
+
+    printf("Nome do fornecedor: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+
+    printf("Telefone do fornecedor: ");
+    fgets(telefone, sizeof(telefone), stdin);
+    telefone[strcspn(telefone, "\n")] = '\0';
+
+    if (cadastrarFornecedor(raizProdutos,codigoProduto,codigoFornecedor,nome,telefone))
+        printf("\nFornecedor cadastrado com sucesso!\n");
+
+    else
+        printf("\nNao foi possivel cadastrar o fornecedor.\n");
+    
 }

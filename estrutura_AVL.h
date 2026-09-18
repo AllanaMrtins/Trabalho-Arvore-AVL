@@ -40,7 +40,15 @@ NoAVL *buscarProduto(NoAVL *raiz, int codigoProduto);
 
 int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos);
 
+//C
 int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade);
+
+// C
+Estoque *criarEstoque(int codigoProduto, int quantidade);
+
+Fornecedor *criarFornecedor(int codigo, char nome[], char telefone[]);
+
+int cadastrarFornecedor(NoAVL *raiz, int codigoProduto, int codigoFornecedor, char nome[], char telefone[]);
 
 void mostrarProduto(NoAVL *raiz, int codigoProduto);
 

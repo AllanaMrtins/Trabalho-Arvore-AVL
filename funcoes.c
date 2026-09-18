@@ -37,8 +37,96 @@ int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos){
     return encontrado;
 }
 
-int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade){
- //a ser digitado
+/* Função para criar um estoque C*/
+Estoque *criarEstoque(int codigoProduto, int quantidade)
+{
+    Estoque *novo;
+    novo = (Estoque *)malloc(sizeof(Estoque));
+    if (novo != NULL)
+    {
+        novo->codigoProduto = codigoProduto;
+        novo->quantidade = quantidade;
+    }
+    return novo;
+}
+
+Fornecedor *criarFornecedor(int codigo, char nome[], char telefone[])
+{
+    Fornecedor *novo;
+
+    novo = (Fornecedor *)malloc(sizeof(Fornecedor));
+
+    if (novo != NULL)
+    {
+        novo->codigo = codigo;
+
+        strcpy(novo->nome, nome);
+        strcpy(novo->telefone, telefone);
+    }
+
+    return novo;
+}
+
+// letra C também
+int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade)
+{
+    if (raiz == NULL)
+        return 0;
+
+    if (codigoProduto == raiz->produto.codigo)
+    {
+        if (raiz->produto.estoque == NULL)
+            raiz->produto.estoque = criarEstoque(codigoProduto, quantidade);
+        else
+            raiz->produto.estoque->quantidade = quantidade;
+
+        return 1;
+    }
+
+    if (codigoProduto < raiz->produto.codigo)
+        return cadastrarEstoque(raiz->esq, codigoProduto, quantidade);
+
+    return cadastrarEstoque(raiz->dir, codigoProduto, quantidade);
+}
+
+int cadastrarFornecedor(NoAVL *raiz, int codigoProduto, int codigoFornecedor, char nome[], char telefone[])
+{
+    int resultado = 0;
+    Fornecedor *novo;
+
+    if (raiz != NULL)
+    {
+        if (codigoProduto == raiz->produto.codigo)
+        {
+            if (raiz->produto.fornecedor == NULL)
+            {
+                novo = criarFornecedor(codigoFornecedor, nome, telefone);
+
+                if (novo != NULL)
+                {
+                    raiz->produto.fornecedor = novo;
+                    resultado = 1;
+                }
+            }
+            else
+            {
+                raiz->produto.fornecedor->codigo = codigoFornecedor;
+                strcpy(raiz->produto.fornecedor->nome, nome);
+                strcpy(raiz->produto.fornecedor->telefone, telefone);
+
+                resultado = 1;
+            }
+        }
+        else if (codigoProduto < raiz->produto.codigo)
+        
+            resultado = cadastrarFornecedor(raiz->esq, codigoProduto,codigoFornecedor, nome, telefone);
+        
+        else
+        
+            resultado = cadastrarFornecedor(raiz->dir, codigoProduto,codigoFornecedor, nome, telefone);
+    }
+
+    return resultado;
 }
 
 void mostrarProduto(NoAVL *raiz, int codigoProduto){
