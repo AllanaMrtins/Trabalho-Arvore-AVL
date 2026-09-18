@@ -37,7 +37,6 @@ int buscarComPassos(NoAVL *raiz, int codigoProduto, int *passos){
     return encontrado;
 }
 
-/* Função para criar um estoque C*/
 Estoque *criarEstoque(int codigoProduto, int quantidade)
 {
     Estoque *novo;
@@ -67,7 +66,6 @@ Fornecedor *criarFornecedor(int codigo, char nome[], char telefone[])
     return novo;
 }
 
-// letra C também
 int cadastrarEstoque(NoAVL *raiz, int codigoProduto, int quantidade)
 {
     if (raiz == NULL)
